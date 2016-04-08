@@ -54,11 +54,14 @@ access control rules
 rule page doc(*){
   true
 }
-rule ajaxtemplate editDoc(d){
+rule ajaxtemplate editDoc(d : Documentation){
   d.mayEdit()
 }
-rule ajaxtemplate viewDoc(*){
+rule ajaxtemplate viewDoc(d : Documentation){
   true
+  rule action edit(){
+  	d.mayEdit()
+  }
 }
 
 section pages
@@ -74,6 +77,9 @@ template view(d : Documentation){
 }
 ajax template viewDoc(d: Documentation){
   var next := d.next()
+  action edit(){
+  	replace("content", editDoc(d));
+  }
   gridRow{
     gridCol(3){
       docIndex(d)
@@ -83,7 +89,7 @@ ajax template viewDoc(d: Documentation){
       if(next != null){
         "Next: " submitlink action{ next.show(); }[ignore default class]{ output(next.name) }
       } br
-      submitlink action{ replace("content", editDoc(d));}{ "edit" }
+      submitlink edit(){ "edit" }
       
       <script>
         $('.doc-link').each( function(){
@@ -134,10 +140,10 @@ template indexNav(d : Documentation, viewed : Documentation){
         submitlink action{ d.show(); }[ignore default class, id="link-"+d.key]{ output(d.name) }
       }
     }
-    pullRight{
+    if(d.mayEdit()){ pullRight{
       updown(d, viewed)
       " " submit addSub()[ajax, class="btn-xs"]{ iPlus "Add sub-item "}
-    }
+    } }
   }  
   for(sub in d.subDocs){
     div[class="indent"]{ indexNav(sub, viewed) }
