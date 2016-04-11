@@ -84,6 +84,7 @@ ajax template viewDoc(d: Documentation){
     gridCol(3){
       docIndex(d)
     } gridCol(9){
+      pageHeader3{ output(d.name) }
       rawoutput(d.render())
       hrule
       if(next != null){
@@ -133,7 +134,7 @@ template indexNav(d : Documentation, viewed : Documentation){
     viewed.show();
   }
   div[class="doc-index-entry"]{
-    strong[title=d.key]{
+    strong[title="key: " + d.key]{
       if(d == viewed){
         "> " output(d.name)
       }else{
