@@ -51,7 +51,7 @@ entity Documentation{
 }
 
 access control rules
-rule page doc(*){
+rule page docs(*){
   true
 }
 rule ajaxtemplate editDoc(d : Documentation){
@@ -66,7 +66,7 @@ rule ajaxtemplate viewDoc(d : Documentation){
 
 section pages
 
-page doc(d : Documentation){
+page docs(d : Documentation){
   view(d)
 }
 
@@ -136,6 +136,11 @@ template indexNav(d : Documentation, viewed : Documentation){
   div[class="doc-index-entry"]{
     strong[title="key: " + d.key]{
       if(d == viewed){
+        <script>
+	        if( history.replaceState && window.location.href.indexOf("/docs") > 0) {
+	          history.replaceState( {}, null, "~( navigate( docs(viewed) ) )" );
+	        }
+        </script>
         "> " output(d.name)
       }else{
         submitlink action{ d.show(); }[ignore default class, id="link-"+d.key]{ output(d.name) }
