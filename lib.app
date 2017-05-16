@@ -85,7 +85,7 @@ ajax template viewDoc(d: Documentation){
       docIndex(d)
     } gridCol(9){
       pageHeader3{ output(d.name) }
-      rawoutput(d.render())
+      div[class="doc-item"]{ rawoutput(d.render()) }
       hrule
       if(next != null){
         "Next: " submitlink action{ next.show(); }[ignore default class]{ output(next.name) }
